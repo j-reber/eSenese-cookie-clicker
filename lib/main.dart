@@ -92,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _deviceStatus = '';
   bool sampling = false;
   String _event = '';
+  SensorEvent acceleration = SensorEvent();
   String _button = 'not pressed';
 
   // the name of the eSense device to connect to -- change this to your own device.
@@ -151,11 +152,11 @@ class _MyHomePageState extends State<MyHomePage> {
             _button = (event as ButtonEventChanged).pressed
                 ? 'pressed'
                 : 'not pressed';
-            totalCookies++;
+            clickCookie();
             break;
           case AccelerometerOffsetRead:
             // TODO
-            
+
             break;
           case AdvertisementAndConnectionIntervalRead:
             // TODO
@@ -195,8 +196,16 @@ class _MyHomePageState extends State<MyHomePage> {
     // subscribe to sensor event from the eSense device
     subscription = ESenseManager.sensorEvents.listen((event) {
       print('SENSOR event: $event');
+
       setState(() {
         _event = event.toString();
+        acceleration = event;
+
+
+          if (event.accel[0] > -1000) {
+            clickCookie();
+
+        }
       });
     });
     setState(() {
@@ -292,7 +301,9 @@ class _MyHomePageState extends State<MyHomePage> {
             child: FloatingActionButton(
               //showDialog with connect info
               onPressed: () {
-                print('hello');
+                print('$_event');
+
+                _startListenToSensorEvents();
                 showDialog(
                     context: context,
                     builder: (context) {
@@ -314,8 +325,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                               children: [
-                                Text(
-                                    'eSense Device Status: \t$_deviceStatus'),
+                                Text('eSense Device Status: \t$_deviceStatus'),
                                 Text('eSense Device Name: \t$_deviceName'),
                                 Text('eSense Battery Level: \t$_voltage'),
                                 Text('eSense Button Event: \t$_button'),
