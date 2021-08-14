@@ -40,7 +40,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double totalCookies = 1000000.0;
+  double totalCookies = 000000.0;
   int cookiesPerSecond = 0;
   Timer? timer;
 
@@ -270,6 +270,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   elevation: 0.0,
                   highlightElevation: 0.0,
+                  backgroundColor: Colors.white,
+                  hoverElevation: 0.0,
+                  focusElevation: 0.0,
                 ),
               ),
             ),
